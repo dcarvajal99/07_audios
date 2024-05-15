@@ -1,16 +1,17 @@
 import os
 import re
 import sys
+import paramiko
 import datetime
 
 sys.path.append('C:/07_Audios')
 
-from mkdir import mkdir
+from services.mkdir import mkdir
 from connections.conn_sftp import Sftp as Sftp
 from menus.sftp import sftp_menu
+from helpers.helpers import Helpers
 
-import os
-
+# Datos del servidor SFTP
 sftplist = [
     {
         "sftp_host" : "200.111.131.198",
@@ -26,32 +27,14 @@ sftplist = [
     },
 ]
 
-def campaing_list(campaña):
-    if campaña == 'default':
-        base_dir = r'C:\07_Audios\ASESORIA_DE_DENUNCIAS_ZURICH'
-    elif campaña == 'Siniestros' or campaña == 'RECHAZO_DE_SINIESTRO':
-        base_dir = r'D:\hermes_p\Files\16461677473437B4\RECORDS\MULTICAMPANA'
-    elif campaña == 'Asistencias':
-        base_dir = r'D:\hermes_p\Files\16461677473437B4\RECORDS\ASISTENCIAS'
-    elif campaña == 'Contact_Center':
-        base_dir = r'D:\hermes_p\Files\16461677473437B4\RECORDS\ENCUESTA_CONTACT_CENTER'
-    elif campaña == 'Cancelaciones':
-        base_dir = r'D:\hermes_p\Files\16461677473437B4\RECORDS\26467605164415B4'
-    elif campaña == 'Retencion':
-        base_dir = r'D:\hermes_p\Files\16461677473437B4\RECORDS\RETENCION'
-    else:
-        print('Campaña no encontrada')
-        sys.exit()
-    return base_dir
 
 
-def get_audios(campaña, registros,fechas):
+def get_audios_by_date(campaña, registros,fechas):
     
     #hacer un case para campaña y bridar 3 rutas diferentes
-    base_dir = campaing_list(campaña)
-    print("base_dir: ",base_dir)
-    # crear una funcion que me busque los archivos en la carpeta records mi lista de ruts y me devuelva los archivos encontrados
+    base_dir = Helpers.dir_campaing(campaña)
 
+    # crear una funcion que me busque los archivos en la carpeta records mi lista de ruts y me devuelva los archivos encontrados
     def buscar_grabaciones(ruts, fechas, directorio):
         grabaciones_encontradas = []
         for rut in ruts:
@@ -84,7 +67,7 @@ def get_audios(campaña, registros,fechas):
     
 
     try:
-        sftp_host, sftp_port, sftp_user, sftp_password = sftp_menu(sftplist).values()
+        sftp_host, sftp_port, sftp_user, sftp_password = sftp_menu().values()
         print("aaaaaaaaaaaaaaaa",sftp_host, sftp_port, sftp_user, sftp_password)
         sftp = Sftp(sftp_host, sftp_port, sftp_user, sftp_password)
         # Crear una conexión SSH
@@ -137,17 +120,3 @@ def get_audios(campaña, registros,fechas):
 
     # Cerrar la conexión SFTP y SSH
     sftp.close()
-
-
-
-try:
-
-    #Cancelaciones
-    registros = ['25510460', '6295233', '7030813', '10141315']
-    fechas  = ['2024-01-08', '08-02-2024', '08-03-2024', '08-04-2024']
-    get_audios('default', registros,fechas)
-
-except Exception as e:
-    print(f"Error en la ejecución: {e}")
-    os.system("pause")
-

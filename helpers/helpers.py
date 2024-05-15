@@ -36,6 +36,25 @@ class Helpers:
                 formatted_dates.append("2000-01-01")  # Si está vacía o no es un formato reconocido, se llena con 2000-01-01
 
         return rut, formatted_dates
+    
+    def dir_campaing(campaña):
+        if campaña == 'default':
+            base_dir = r'C:\07_Audios\ASESORIA_DE_DENUNCIAS_ZURICH'
+        elif campaña == 'Siniestros' or campaña == 'RECHAZO_DE_SINIESTRO':
+            base_dir = r'D:\hermes_p\Files\16461677473437B4\RECORDS\MULTICAMPANA'
+        elif campaña == 'Asistencias':
+            base_dir = r'D:\hermes_p\Files\16461677473437B4\RECORDS\ASISTENCIAS'
+        elif campaña == 'Contact_Center':
+            base_dir = r'D:\hermes_p\Files\16461677473437B4\RECORDS\ENCUESTA_CONTACT_CENTER'
+        elif campaña == 'Cancelaciones':
+            base_dir = r'D:\hermes_p\Files\16461677473437B4\RECORDS\26467605164415B4'
+        elif campaña == 'Retencion':
+            base_dir = r'D:\hermes_p\Files\16461677473437B4\RECORDS\RETENCION'
+        else:
+            print('Campaña no encontrada')
+            sys.exit()
+        return base_dir
+
 
 # Ejemplo de uso:
 # rut, fechas = Helpers.df_definer('tu_archivo.xlsx')

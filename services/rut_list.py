@@ -9,7 +9,7 @@ from helpers.helpers import Helpers as hp
 def rut_list():
     try:
         #ruta de directorio es: C:/07_audios/
-        archivo = 'C:/07_audios/Excels/'
+        archivo = 'C:/07_audios/data/'
         # concatenar con la ruta del directorio cualquier archivo excel dentro de la carpeta
         name = input("Ingrese el nombre del archivo: ")
         archivo = os.path.join(archivo, name+'.xlsx')
@@ -21,8 +21,6 @@ def rut_list():
             rut, fecha = hp.df_definer(xls)
             print(rut, fecha)           
             return rut, fecha
-        
-
         elif len(xls.sheet_names) == 4:  
             df1 = pd.read_excel(xls, 'Base Siniestros')
             df2 = pd.read_excel(xls, 'TNPS Asistencias')
